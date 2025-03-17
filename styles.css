@@ -1,0 +1,159 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+body {
+    background: linear-gradient(135deg, #74ebd5, #acb6e5);
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+.container {
+    background: #fff;
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 600px;
+    text-align: center;
+}
+
+h1 {
+    font-size: 2rem;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+h1 i {
+    color: #74ebd5;
+    margin-right: 10px;
+}
+
+.tab-container {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.tab {
+    padding: 10px 20px;
+    background: #f0f0f0;
+    border: none;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: all 0.3s;
+}
+
+.tab.active, .tab:hover {
+    background: #74ebd5;
+    color: #fff;
+}
+
+.section {
+    display: none;
+}
+
+.section.active {
+    display: block;
+}
+
+input, textarea {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 15px;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    font-size: 1rem;
+    outline: none;
+    transition: border-color 0.3s;
+}
+
+input:focus, textarea:focus {
+    border-color: #74ebd5;
+}
+
+textarea {
+    height: 150px;
+    resize: vertical;
+}
+
+button {
+    background: #74ebd5;
+    color: #fff;
+    padding: 12px 25px;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+button:hover {
+    background: #acb6e5;
+}
+
+.result {
+    margin-top: 20px;
+    text-align: left;
+}
+
+.result-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    background: #f9f9f9;
+    border-radius: 8px;
+    margin-bottom: 10px;
+}
+
+.result-item a {
+    color: #333;
+    text-decoration: none;
+    word-break: break-all;
+}
+
+.result-item button {
+    padding: 5px 15px;
+    font-size: 0.9rem;
+}
+
+.error {
+    color: #e74c3c;
+    margin-top: 10px;
+}
+
+.footer {
+    margin-top: 20px;
+    font-size: 0.9rem;
+    color: #777;
+}
+
+.footer i {
+    color: #e74c3c;
+}
+
+@media (max-width: 480px) {
+    .container {
+        padding: 20px;
+    }
+
+    h1 {
+        font-size: 1.5rem;
+    }
+
+    .tab {
+        padding: 8px 15px;
+        font-size: 0.9rem;
+    }
+
+    button {
+        padding: 10px 20px;
+    }
+}
