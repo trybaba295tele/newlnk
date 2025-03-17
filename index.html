@@ -1,209 +1,39 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>YOURLS Bulk URL Shortener</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background-color: #f0f4f8;
-      padding: 20px;
-      display: flex;
-      justify-content: center;
-    }
-    .container {
-      width: 100%;
-      max-width: 600px;
-      background-color: #ffffff;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-      border-radius: 8px;
-      padding: 25px;
-    }
-    h2 {
-      text-align: center;
-      margin-bottom: 15px;
-    }
-    textarea {
-      width: 100%;
-      height: 150px;
-      padding: 10px;
-      border-radius: 5px;
-      border: 1px solid #ccc;
-      resize: vertical;
-    }
-    button {
-      width: 100%;
-      padding: 10px;
-      margin-top: 15px;
-      background-color: #007bff;
-      color: white;
-      border-radius: 5px;
-      border: none;
-      cursor: pointer;
-    }
-    button:hover {
-      background-color: #0056b3;
-    }
-    .results {
-      margin-top: 20px;
-    }
-    .result-item {
-      background-color: #eaf4ff;
-      padding: 10px;
-      margin-bottom: 10px;
-      border-radius: 5px;
-      word-wrap: break-word;
-    }
-    .error {
-      background-color: #ffeaea !important;
-      color: #d8000c !important;
-    }
-    h1{
-        text-align:center; 
-        color:#333; 
-        margin-bottom:15px; 
-        font-family:sans-serif; 
-    }
-
-    @media(max-width:600px){
-        .container{
-            padding:15px; 
-        }
-        button{
-            font-size:14px; 
-        }
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>URL Shortener</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
+    <div class="container">
+        <h1><i class="fas fa-link"></i> URL Shortener</h1>
+        <div class="tab-container">
+            <button class="tab active" onclick="switchTab('single')">Single URL</button>
+            <button class="tab" onclick="switchTab('bulk')">Bulk URLs</button>
+        </div>
 
-<div class="container">
-<h1>Bulk URL Shortener</h1>
+        <!-- Single URL Section -->
+        <div id="single" class="section active">
+            <input type="text" id="single-url" placeholder="Enter a URL (e.g., https://example.com)">
+            <button onclick="shortenSingleUrl()">Shorten</button>
+            <div id="single-result" class="result"></div>
+        </div>
 
-<textarea id="urlInput" placeholder="Enter URLs here, one per line"></textarea>
-<button id="shortenBtn">Shorten URLs 🚀</button>
+        <!-- Bulk URL Section -->
+        <div id="bulk" class="section">
+            <textarea id="bulk-urls" placeholder="Enter URLs, one per line"></textarea>
+            <button onclick="shortenBulkUrls()">Shorten All</button>
+            <div id="bulk-result" class="result"></div>
+        </div>
 
-<div class="results" id="results"></div>
-</div>
-
-<script>
-// Final JavaScript with CORS proxy workaround
-document.getElementById('shortenBtn').addEventListener('click', async () => {
-
-const input = document.getElementById('urlInput').value.trim();
-if (!input) {
- alert("Please enter at least one URL.");
- return;  
-}
-
-const urls = input.split('\n').map(url => url.trim()).filter(url => url !== '');
-const resultsContainer = document.getElementById('results');
-resultsContainer.innerHTML = '';
-
-const proxyUrl = 'https://corsproxy.io/?';
-const apiEndpoint = 'http://l.digitallyfruol.in/yourls-api.php?signature=88529f4bf9';
-
-for (const originalUrl of urls) {
-
- const resultDiv = document.createElement('div');
- resultDiv.className = 'result-item';
-
- try {
-
-   const formData = new URLSearchParams();
-   formData.append('action', 'shorturl');
-   formData.append('format', 'json');
-   formData.append('url', originalUrl);
-
-   const response = await fetch(proxyUrl + apiEndpoint, {
-     method:'POST',
-     headers:{'Content-Type':'application/x-www-form-urlencoded'},
-     body: formData.toString()
-   });
-
-   if (!response.ok) throw new Error(`HTTP error (${response.status})`);
-
-   const data = await response.json();
-
-   if(data.status === "success"){
-     resultDiv.innerHTML=`✅ <strong>Original:</strong> ${originalUrl}<br>🔗 <strong>Shortened:</strong> <a href="${data.shorturl}" target="_blank">${data.shorturl}</a>`;
-   } else{
-     throw new Error(data.message || "API returned an error");
-   }
-
- } catch(err){
-   resultDiv.className += ' error';
-   resultDiv.innerHTML=`❌ Error shortening "${originalUrl}": ${err.message}`;
- }
-
- resultsContainer.appendChild(resultDiv);
-
-}
-});
-</script>
-
-<div class="results" id="results"></div>
-
-</div>
-
-<script>
-document.getElementById('shortenBtn').addEventListener('click', async () => {
-
-const input = document.getElementById('urlInput').value.trim();
-if (!input) {
- alert("Please enter at least one URL.");
- return;  
-}
-
-const urls = input.split('\n').map(url => url.trim()).filter(url => url !== '');
-const resultsContainer = document.getElementById('results');
-resultsContainer.innerHTML = '';
-
-const proxyUrl = 'https://cors-anywhere.herokuapp.com/';
-const apiEndpoint = 'http://l.digitallyfruol.in/yourls-api.php?signature=88529f4bf9';
-
-for (const originalUrl of urls) {
-
- const resultDiv = document.createElement('div');
- resultDiv.className='result-item';
-
- try {
-
-   const formData=new URLSearchParams();
-   formData.append('action','shorturl');
-   formData.append('format','json');
-   formData.append('url',originalUrl);
-
-   const response=await fetch(proxyUrl+apiEndpoint,{
-     method:'POST',
-     headers:{'Content-Type':'application/x-www-form-urlencoded'},
-     body:formData.toString()
-   });
-
-   if (!response.ok) throw new Error(`HTTP error (${response.status})`);
-
-   const data=await response.json();
-
-   if(data.status==="success"){
-     resultDiv.innerHTML=`✅ <strong>Original:</strong> ${originalUrl}<br>🔗 <strong>Shortened:</strong> <a href="${data.shorturl}" target="_blank">${data.shorturl}</a>`;
-   }else{
-     throw new Error(data.message||"API returned an error");
-   }
-
- }catch(err){
-   resultDiv.classList.add('error');
-   resultDiv.innerHTML=`❌ Error shortening "${originalUrl}": ${err.message}`;
- }
-
- resultsContainer.appendChild(resultDiv);
-}
-});
-</script>
-
-<div class="results" id="results"></div>
-
-</div>
-
+        <div class="footer">
+            <p>Made with <i class="fas fa-heart"></i> using YOURLS API</p>
+        </div>
+    </div>
+    <script src="script.js"></script>
 </body>
 </html>
