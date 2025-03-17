@@ -1,5 +1,9 @@
 const YOURS_API_ENDPOINT = 'http://l.digitallyfruol.in/yourls-api.php';
 const API_SIGNATURE = '88529f4bf9';
+// Optional CORS proxy (uncomment if needed): 
+// const CORS_PROXY = 'https://cors-anywhere.herokuapp.com/';
+// const API_URL = CORS_PROXY + YOURS_API_ENDPOINT;
+const API_URL = YOURS_API_ENDPOINT; // Use direct endpoint by default
 
 function switchTab(tab) {
     document.querySelectorAll('.section').forEach(section => section.classList.remove('active'));
@@ -16,7 +20,15 @@ function clearResults() {
 
 async function shortenUrl(url) {
     try {
-        const response = await fetch(`${YOURS_API_ENDPOINT}?signature=${API_SIGNATURE}&action=shorturl&format=json&url=${encodeURIComponent(url)}`);
+        const response = await fetch(`${API_URL}?signature=${API_SIGNATURE}&action=shorturl&format=json&url=${encodeURIComponent(url)}`, {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json'
+            }
+        });
+        if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
         const data = await response.json();
         if (data.status === 'success') {
             return data.shorturl;
@@ -24,7 +36,7 @@ async function shortenUrl(url) {
             throw new Error(data.message || 'Failed to shorten URL');
         }
     } catch (error) {
-        throw new Error(error.message || 'Network error');
+        throw new Error(`Fetch failed: ${error.message}`);
     }
 }
 
